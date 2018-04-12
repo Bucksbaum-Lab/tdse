@@ -1,0 +1,1 @@
+[Vp, Vm, WD, A, Ainv, AINV] = makeW(W11, W12, W22);

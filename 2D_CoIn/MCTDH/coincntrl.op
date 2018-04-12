@@ -1,0 +1,62 @@
+#######################################################################
+#  Two coupled Two-Level systems,coupled ohmig baths driven by an extranal field 
+#######################################################################
+
+OP_DEFINE-section
+
+title
+CoIn at Franck-Condon, control possibilities
+end-title
+end-OP_DEFINE-section
+
+PARAMETER-SECTION
+
+s = 0.05
+lmb = 0.2
+mx = 1.0,AMU
+my = 5.0,AMU
+wx = 3000.0,cm-1
+wy = 2000.0,cm-1
+
+wx2 = wx*wx
+wy2 = wy*wy
+
+p1 = 1.0
+x1 = 2.5
+
+end-parameter-section
+
+
+labels-section
+
+s1 = switch1[p1,x1]
+s2 = switch2[p1,-x1]
+
+end-labels-section
+
+
+HAMILTONIAN-section
+modes  | x  | y  | el
+#modes  | Time
+
+####### KEO ############
+-0.5/mx         | dq^2      | 1         | 1
+-0.5/my         | 1         | dq^2      | 1
+
+####### Diag X #########
+ 0.5*mx*wx2     | q^2       | 1         | S1&1
+-s              | q*s1      | 1         | S2&2
+ s*x1           | s1        | 1         | S2&2
+ s              | q*s2      | 1         | S3&3
+ s*x1           | s2        | 1         | S3&3
+
+####### Diag Y #########
+ 0.5*my*wy2     | 1         | q^2       | 1
+
+####### 2,3 electr. Cpl ########
+ lmb            | 1         | q         | S2&3
+
+end-HAMILTONIAN-section
+
+
+end-operator

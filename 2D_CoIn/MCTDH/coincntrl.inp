@@ -1,0 +1,43 @@
+RUN-SECTION
+name=run001
+propagation
+tfinal=20.0 tout=0.5
+gridpop=el
+psi
+end-run-section
+
+OPERATOR-SECTION
+opname = coincntrl
+end-operator-section
+
+SBASIS-SECTION
+x = 10
+y = 10
+el = 3
+end-sbasis-section
+
+PBASIS-SECTION
+x    sin  151  -8.0 8.0
+y    HO   101   0.0 2000.0,cm-1 5.0,AMU
+el   el   3
+end-pbasis-section
+
+INTEGRATOR-SECTION
+ CMF/var =  0.5d0 , 1.0d-7
+ BS/spf  =      8 , 1.0d-7
+ SIL/A   =     15 , 1.0d-7
+end-integrator-section
+
+INIT_WF-SECTION
+ build
+ init_state = 1
+ x   HO  0.0000  0.0   3000.0,cm-1  1.0,AMU
+ y   HO  0.0000  0.0   2000.0,cm-1  5.0,AMU
+ end-build
+ A-coeff
+  1  1  2  (1.0, 0.0)
+  1  1  3  (-1.0, 0.0)
+ end-A-coeff
+end-init_wf-section
+
+end-input
