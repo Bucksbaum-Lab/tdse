@@ -1,7 +1,7 @@
 %EV = 1;
 EV = linspace(0,2,11);
 DD = length(EV);
-phase = linspace(0,pi(),11);
+phase = linspace(0,pi(),1);
 %DD = 1;
 EA = zeros(size(EV));
 GA = zeros(size(EV));
@@ -9,13 +9,12 @@ EAtotal = zeros(length(EV),length(phase));
 GAtotal = zeros(length(EV),length(phase));
 
 for qq = 1:length(phase)
-    clc
-    disp(['phase ' num2str(phase(qq))])
 for TT = 1:DD
 
-clearvars -except EV TT DD EA GA phase EAtotal GAtotal qq
+clearvars -except EV TT DD EA GA phase EAtotal GAtotal
 load('CHScan.mat')
-%close all
+close all
+clc
 disp('Coming up with time estimate...')
 disp(['EV ' num2str(EV(TT))])
 
@@ -71,11 +70,11 @@ omegaLight = lighteV/hbar;
 CHPi = [0;CHScan(:,1)*0.529177249;19;19.2;19.4;19.6;19.8;20];
 CHS = [0;CHScan(:,1)*0.529177249;19;19.2;19.4;19.6;19.8;20];
 PiNew = [-75.01;CHScan(:,3);-76.782;-76.782;-76.782;-76.782;-76.782;-76.782];
-%W22 = (spline(CHPi, PiNew, XX)+76.7818)*27.21;
-W22 = spline(CHPi, PiNew, XX)+kappay2*YY.^2+76.7818;
+W22 = (spline(CHPi, PiNew, XX)+76.7818)*27.21;
+%W22 = spline(CHPi, PiNew, XX)+kappay2*YY.^2+76.7818;
 threeSigmaNew = [-75.4;CHScan(:,2);-75.582;-75.582;-75.582;-75.582;-75.582;-75.582];
-%W11 = (spline(CHS, threeSigmaNew, XX)+76.7818)*27.21;
-W11 = spline(CHS, threeSigmaNew, XX)+kappay1*YY.^2+76.7818;
+W11 = (spline(CHS, threeSigmaNew, XX)+76.7818)*27.21;
+%W11 = spline(CHS, threeSigmaNew, XX)+kappay1*YY.^2+76.7818;
 W12 = lambda*YY;
 
 KEUU = exp(-1i*pi^2*hbar/8/mm*dt*(k1.^2+k2.^2));
@@ -324,7 +323,6 @@ ylim([0,2])
 xlim([0,2])
 xlabel('photon energy (eV)')
 legend('excited pop','\Upsilon')
-title([num2str(phase(qq)) ' rad'])
 
 EAtotal(:,qq) = EA;
 GAtotal(:,qq) = GA;
