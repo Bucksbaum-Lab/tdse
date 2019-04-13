@@ -41,41 +41,34 @@ kk = fftshift(kk);
 
 %% Constants
 
-kappax1 = 8;
-kappax2 = 8;
-kappay1 = 8; %eV/Angstrom
-kappay2 = 8;
 lambda = .01;
 mm = 1*104.4070; %amu
 hbar = 0.658;
 lighteV = EV(TT); %eV
-mu = .5*(XX<2.645); %eV
+mu = .5*(XX<2.77); %eV
 xposition = 1.06; %Angstrom
 carrierphase = phase(qq); 
 pulsedelay = 0; %fs
 
-omegax1 = (kappax1/mm)^.5;
 widthx1 = .869;
-%widthx1 = 2*hbar/mm/omegax1;
-omegax2 = (kappax2/mm)^.5;
 widthx2 = .869;
-%widthx2 = 2*hbar/mm/omegax2;
-omegay1 = (kappay1/mm)^.5;
-widthy1 = 2*hbar/mm/omegay1;
-omegay2 = (kappay2/mm)^.5;
-widthy2 = 2*hbar/mm/omegay2;
+widthy1 = .869;
+widthy2 = .869;
+
+kappay1 = 4*hbar^2/(mm*widthy1^2);
+kappay2 = 4*hbar^2/(mm*widthy2^2);
 
 omegaLight = lighteV/hbar;
 
 %% Hamiltonians
 CHPi = [0;CHScan(:,1)*0.529177249;19;19.2;19.4;19.6;19.8;20];
 CHS = [0;CHScan(:,1)*0.529177249;19;19.2;19.4;19.6;19.8;20];
-PiNew = [-75.01;CHScan(:,3);-76.782;-76.782;-76.782;-76.782;-76.782;-76.782];
+PiNew = [-74;CHScan(:,3);-76.782;-76.782;-76.782;-76.782;-76.782;-76.782];
 %W22 = (spline(CHPi, PiNew, XX)+76.7818)*27.21;
-W22 = spline(CHPi, PiNew, XX)+kappay2*YY.^2+76.7818;
-threeSigmaNew = [-75.4;CHScan(:,2);-75.582;-75.582;-75.582;-75.582;-75.582;-75.582];
+W22 = (spline(CHPi, PiNew, XX)+kappay2*YY.^2+76.7818)*27.21;
+threeSigmaNew = [-74.5;CHScan(:,2);-75.582;-75.582;-75.582;-75.582;-75.582;-75.582];
 %W11 = (spline(CHS, threeSigmaNew, XX)+76.7818)*27.21;
-W11 = spline(CHS, threeSigmaNew, XX)+kappay1*YY.^2+76.7818;
+W11 = (spline(CHS, threeSigmaNew, XX)+kappay1*YY.^2+76.7818)*27.21;
 W12 = lambda*YY;
 
 KEUU = exp(-1i*pi^2*hbar/8/mm*dt*(k1.^2+k2.^2));
@@ -333,4 +326,18 @@ end
 x=linspace(0,2001,200);
 y=sin(x);
 sound(y)
+
+DVDRp=((EE)'-circshift((EE)',-1))'/(stretch(1)-stretch(2));
+VVp = 2*abs(DVDRp(cond)*width./EE(cond));
+
+figure(); 
+yyaxis left
+plot(EV, sum(EAtotal,2)/11, 'o')
+ylim([0,max(sum(EAtotal,2)/11)*1.1])
+yyaxis right
+plot(EE(cond),VV,EE(cond),VVp,[.95,.95],[0,10],[1.5,1.5],[0,10])
+ylim([0,10])
+xlim([0,2])
+xlabel('photon energy (eV)')
+legend('excited pop','\Upsilon=\Delta V/\Delta E','\Upsilon=\Delta E/\Delta E')
 %}
